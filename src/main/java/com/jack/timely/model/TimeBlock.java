@@ -6,13 +6,22 @@ import javax.persistence.*;
 import java.sql.Timestamp;
 
 @Entity
-public class Times {
-    public long getId_() {
-        return id_;
+public class TimeBlock {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(nullable = false, updatable = false)
+    private long id;
+    private String title;
+    @CreationTimestamp
+    @Column(nullable = false, updatable = false)
+    private Timestamp startTime;
+    private Timestamp endTime;
+    public long getId() {
+        return id;
     }
 
-    public void setId_(long id_) {
-        this.id_ = id_;
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getTitle() {
@@ -39,13 +48,5 @@ public class Times {
         this.endTime = endTime;
     }
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(nullable = false, updatable = false)
-    private long id_;
-    private String title;
-    @CreationTimestamp
-    @Column(nullable = false, updatable = false)
-    private Timestamp startTime;
-    private Timestamp endTime;
+
 }
