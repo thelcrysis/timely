@@ -3,17 +3,18 @@ package com.jack.timely.model;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 @Entity
-public class TimeBlock {
+public class TimeBlock implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, updatable = false)
     private long id;
     private String title;
     @CreationTimestamp
-    @Column(nullable = false, updatable = false)
+    @Column(updatable = false)
     private Timestamp startTime;
     private Timestamp endTime;
     public long getId() {
@@ -48,5 +49,13 @@ public class TimeBlock {
         this.endTime = endTime;
     }
 
-
+    @Override
+    public String toString() {
+        return "TimeBlock{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", startTime=" + startTime +
+                ", endTime=" + endTime +
+                '}';
+    }
 }

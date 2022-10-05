@@ -19,15 +19,11 @@ public class TimeBlockService {
         this.timeBlockRepo = timeBlockRepo;
     }
 
-    public TimeBlock startTimeBlock(TimeBlock timeBlock) {
-        Date now = (Date) Calendar.getInstance().getTime();
-        timeBlock.setStartTime(new Timestamp(now.getTime()));
+    public TimeBlock createTimeBlock(TimeBlock timeBlock) {
         return timeBlockRepo.save(timeBlock);
     }
 
-    public TimeBlock endTimeBlock(TimeBlock timeBlock){
-        Date now = (Date) Calendar.getInstance().getTime();
-        timeBlock.setEndTime(new Timestamp(now.getTime()));
+    public TimeBlock updateTimeBlock(TimeBlock timeBlock){
         return timeBlockRepo.save(timeBlock);
     }
 
@@ -35,12 +31,11 @@ public class TimeBlockService {
         return timeBlockRepo.findAll();
     }
 
-    // TODO: TimeBlock object can be passed? Angular dependant?
     public void delete(Long id){
         timeBlockRepo.deleteTimeBlockById(id); // time block not found exception
     }
 
-    public TimeBlock findById_(Long id){
+    public TimeBlock findById(Long id){
         return timeBlockRepo.findTimeBlockById(id); // time block not found exception
     }
 
