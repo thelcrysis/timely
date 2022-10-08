@@ -8,7 +8,7 @@ import { TimeBlock } from './time-block';
 })
 
 export class TimeBlockService {
-  private apiServerUrl = '';
+  private apiServerUrl = 'http://localhost:8080'; //TODO
 
   constructor(private http: HttpClient){}
 
@@ -23,12 +23,14 @@ export class TimeBlockService {
   }
   
   // /create -post
-  public startTimeBlock(timeBlock: TimeBlock): Observable<TimeBlock>{
-    return this.http.post<TimeBlock>(`${this.apiServerUrl}/timeblock/create`, timeBlock);
+  public startTimeBlock(timeBlock: TimeBlock | null): Observable<TimeBlock>{
+    console.log("started from services!");
+    console.log(timeBlock)
+    return this.http.post<TimeBlock>(`${this.apiServerUrl}/timeblock/create`, {});
   }
 
   // /end -put
-  public endTimeBlock(timeBlock: TimeBlock): Observable<TimeBlock>{
+  public endTimeBlock(timeBlock: TimeBlock | null): Observable<TimeBlock>{
     return this.http.put<TimeBlock>(`${this.apiServerUrl}/timeblock/end`, timeBlock);
   }  
 
@@ -45,5 +47,5 @@ export class TimeBlockService {
   // deleteAll
   public deleteAll(): Observable<void>{
     return this.http.delete<void>(`${this.apiServerUrl}/timeblock/deleteAll`)
-  }
+  } 
 }
