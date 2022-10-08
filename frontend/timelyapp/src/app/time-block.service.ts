@@ -24,8 +24,6 @@ export class TimeBlockService {
   
   // /create -post
   public startTimeBlock(timeBlock: TimeBlock | null): Observable<TimeBlock>{
-    console.log("started from services!");
-    console.log(timeBlock)
     return this.http.post<TimeBlock>(`${this.apiServerUrl}/timeblock/create`, {});
   }
 

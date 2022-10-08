@@ -26,6 +26,7 @@
         <th scope="col">Title</th>
         <th scope="col">Start time</th>
         <th scope="col">End time</th>
+        <th scope="col">Duration</th>
         <th scope="col">Selected</th>
         <th></th>
       </tr>
@@ -36,6 +37,7 @@
         <td>{{ tb.title }}</td>
         <td>{{ tb.startTime | date: "short" }}</td>
         <td>{{ tb.endTime | date: "short" }}</td>
+        <td>{{ durations[tb.id]}}</td>
         <td>
           <input
             type="checkbox"

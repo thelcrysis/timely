@@ -4,6 +4,7 @@ import { Component, OnInit } from '@angular/core';
 import { TimeBlock } from './time-block';
 import { TimeBlockService } from './time-block.service';
 import { Dictionary } from 'lodash';
+import { durationsBetweenTimestamps } from './misc';
 
 @Component({
   selector: 'app-root',
@@ -25,6 +26,7 @@ export class AppComponent implements OnInit {
   public selection: Dictionary<any> = {};
   public editId: number | null = null;
   public editTitle: string = '';
+  public durations: Dictionary<any> = {};
   constructor(private timeBlockService: TimeBlockService) {}
 
   ngOnInit(): void {
@@ -33,6 +35,9 @@ export class AppComponent implements OnInit {
 
   // updates table
   public getTimeBlocks(): void {
+    this.selection = {};
+    this.timeBlocks = [];
+    this.durations = {};
     this.timeBlockService.getTimeBlock().subscribe(
       (response: TimeBlock[]) => {
         this.timeBlocks = response.sort((a: TimeBlock, b: TimeBlock) => {
@@ -47,8 +52,15 @@ export class AppComponent implements OnInit {
           if (curr_id !== undefined) {
             this.selection[curr_id] = false;
           }
+          if (
+            this.timeBlocks[i].startTime !== null &&
+            this.timeBlocks[i].endTime !== null
+          ) {
+            this.durations[this.timeBlocks[i].id] = (durationsBetweenTimestamps(this.timeBlocks[i].startTime,this.timeBlocks[i].endTime));
+          } else {
+            this.durations[this.timeBlocks[i].id] = "";
+          }
         }
-        console.log(this.timeBlocks);
       },
       (error: HttpErrorResponse) => {
         alert(error.message);
@@ -58,7 +70,6 @@ export class AppComponent implements OnInit {
 
   public flipCounter(): void {
     this.countStarted = !this.countStarted;
-    console.log(this.countStarted);
   }
 
   public startAction(): void {
@@ -88,7 +99,6 @@ export class AppComponent implements OnInit {
     // loop through current selection
     for (let key in this.selection) {
       if (this.selection[key]) {
-        console.log(key);
         let timeBlockId = parseInt(key);
         this.timeBlockService.deleteById(timeBlockId).subscribe(() => {
           this.getTimeBlocks();
@@ -98,6 +108,9 @@ export class AppComponent implements OnInit {
   }
 
   public deleteAllAction(): void {
+    this.currentSession = {};
+    this.flipCounter();
+    this.timeBlocks = [];
     this.timeBlockService.deleteAll().subscribe((response) => {
       this.getTimeBlocks();
     });
@@ -105,9 +118,7 @@ export class AppComponent implements OnInit {
 
   // flips certain selection flag
   public makeSelection(id: number | undefined): void {
-    console.log(id);
     this.selection[<number>id] = !this.selection[<number>id];
-    console.log(this.selection);
   }
 
   // records which session is being edited -> this.editId
@@ -121,7 +132,7 @@ export class AppComponent implements OnInit {
       .updateTimeBlock({ id: <number>this.editId, title: this.editTitle })
       .subscribe(() => {
         this.getTimeBlocks();
-        this.editTitle = "";
+        this.editTitle = '';
       });
   }
 }
