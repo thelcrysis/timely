@@ -12,12 +12,17 @@ import { Dictionary } from 'lodash';
 })
 export class AppComponent implements OnInit {
   public timeBlocks: TimeBlock[] = [];
-  public title: string = 'loaded';
-  public countStarted: boolean = false;
-  public currentSession: Partial<TimeBlock> = {};
-  public showTable = false;
-  public selection: Dictionary<any> = {};
 
+  // Flags used for changing whats visible
+  // countStarted is used for switch between start and stop buttons
+  // showTable is flipped to true after first session start
+  public countStarted: boolean = false;
+  public showTable = false;
+
+  public currentSession: Partial<TimeBlock> = {};
+
+  // Records which rows are selected
+  public selection: Dictionary<any> = {};
   public editId: number | null = null;
   public editTitle: string = '';
   constructor(private timeBlockService: TimeBlockService) {}
@@ -26,6 +31,7 @@ export class AppComponent implements OnInit {
     this.getTimeBlocks();
   }
 
+  // updates table
   public getTimeBlocks(): void {
     this.timeBlockService.getTimeBlock().subscribe(
       (response: TimeBlock[]) => {
@@ -66,17 +72,12 @@ export class AppComponent implements OnInit {
     this.showTable = true;
   }
 
-  public endAction(): void {
-    console.log('id =' + this.currentSession.id);
-    console.log('start');
-  }
-
   public finishSession(): void {
     this.flipCounter();
     this.timeBlockService
       .endTimeBlock({
-        id: this.currentSession.id,
-        title: this.currentSession.title,
+        id: <number>this.currentSession.id,
+        title: <string>this.currentSession.title,
       })
       .subscribe((res) => {
         this.getTimeBlocks();
@@ -84,7 +85,7 @@ export class AppComponent implements OnInit {
   }
 
   public delete(): void {
-    // loop throught current selection
+    // loop through current selection
     for (let key in this.selection) {
       if (this.selection[key]) {
         console.log(key);
@@ -95,28 +96,32 @@ export class AppComponent implements OnInit {
       }
     }
   }
+
   public deleteAllAction(): void {
     this.timeBlockService.deleteAll().subscribe((response) => {
       this.getTimeBlocks();
     });
   }
 
+  // flips certain selection flag
   public makeSelection(id: number | undefined): void {
     console.log(id);
     this.selection[<number>id] = !this.selection[<number>id];
     console.log(this.selection);
   }
 
+  // records which session is being edited -> this.editId
   public edit(id: number | undefined): void {
     this.editId = <number>id;
-    console.log('trying to edit:' + this.editId);
   }
 
+  // updates edited session
   public editSession(): void {
     this.timeBlockService
       .updateTimeBlock({ id: <number>this.editId, title: this.editTitle })
       .subscribe(() => {
         this.getTimeBlocks();
+        this.editTitle = "";
       });
   }
 }

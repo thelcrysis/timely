@@ -30,12 +30,12 @@ export class TimeBlockService {
   }
 
   // /end -put
-  public endTimeBlock(timeBlock: TimeBlock | null): Observable<TimeBlock>{
+  public endTimeBlock(timeBlock: Partial<TimeBlock> | null): Observable<TimeBlock>{
     return this.http.put<TimeBlock>(`${this.apiServerUrl}/timeblock/end`, timeBlock);
   }  
 
   // /update -put
-  public updateTimeBlock(timeBlock: TimeBlock): Observable<TimeBlock>{
+  public updateTimeBlock(timeBlock: Partial<TimeBlock>): Observable<TimeBlock>{
     return this.http.put<TimeBlock>(`${this.apiServerUrl}/timeblock/update`, timeBlock);
   }  
 
