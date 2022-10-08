@@ -1,4 +1,3 @@
-<!-- <input type="checkbox" id="vehicle3" name="vehicle3" value="Boat" [(ngModel)]="selection.$()"> -->
 <div *ngIf="!countStarted">
   <button
     (click)="startAction()"
@@ -28,6 +27,8 @@
         <th scope="col">Title</th>
         <th scope="col">Start time</th>
         <th scope="col">End time</th>
+        <th scope="col">Selected</th>
+        <th></th>
       </tr>
     </thead>
     <tbody>
@@ -36,18 +37,36 @@
         <td>{{ tb.title }}</td>
         <td>{{ tb.startTime | date: "short" }}</td>
         <td>{{ tb.endTime | date: "short" }}</td>
+        <td>
+          <input
+            type="checkbox"
+            id="{{ tb.id }}"
+            name="vehicle3"
+            (click)="makeSelection(tb.id)"
+          />
+        </td>
+        <td><button type="button" class="btn btn-link">edit</button></td>
       </tr>
     </tbody>
   </table>
-  <button
-    (click)="deleteAllAction()"
-    type="button"
-    class="btn btn-secondary btn-lg"
-    style="margin-top: 0.5em; margin-bottom: 1em;"
-  >
-    Delete All
-  </button>
-
+  <div class="tableButtons" style="margin-top: 0.5em; margin-bottom: 1em">
+    <button
+      (click)="delete()"
+      type="button"
+      class="btn btn-secondary btn-lg"
+      style="margin-right: 0.5em;"
+    >
+      Delete
+    </button>
+    <button
+      (click)="deleteAllAction()"
+      type="button"
+      class="btn btn-secondary btn-lg"
+      style="margin-right: 0.5em;"
+    >
+      Delete All
+    </button>
+  </div>
   <!-- <ul id="list">
         <li >
         <span>{{timeblock.title}} - {{timeblock.title}} - ({{timeblock.startTime}}:{{timeblock.endTime}})</span></li>
@@ -92,7 +111,12 @@
         <button type="button" class="btn btn-secondary" data-dismiss="modal">
           Close
         </button>
-        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="finishSession()">
+        <button
+          type="button"
+          class="btn btn-primary"
+          data-dismiss="modal"
+          (click)="finishSession()"
+        >
           Stop timer!
         </button>
       </div>

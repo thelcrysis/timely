@@ -4,6 +4,7 @@ import com.jack.timely.model.TimeBlock;
 import com.jack.timely.repo.TimeBlockRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
 import java.sql.Timestamp;
@@ -11,6 +12,7 @@ import java.util.Calendar;
 import java.util.List;
 
 @Service
+@Transactional
 public class TimeBlockService {
     private final TimeBlockRepo timeBlockRepo;
 

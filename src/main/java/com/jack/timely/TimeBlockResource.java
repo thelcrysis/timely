@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
 import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.List;
@@ -53,6 +54,7 @@ public class TimeBlockResource {
         return new ResponseEntity<>(tb, HttpStatus.OK);
     }
 
+    @Transactional
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<TimeBlock> deleteTimeBlock(@PathVariable("id") Long id) {
         timeBlockService.delete(id);
