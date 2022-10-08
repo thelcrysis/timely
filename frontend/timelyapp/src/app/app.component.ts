@@ -17,6 +17,9 @@ export class AppComponent implements OnInit {
   public currentSession: Partial<TimeBlock> = {};
   public showTable = false;
   public selection: Dictionary<any> = {};
+
+  public editId: number | null = null;
+  public editTitle: string = '';
   constructor(private timeBlockService: TimeBlockService) {}
 
   ngOnInit(): void {
@@ -26,7 +29,13 @@ export class AppComponent implements OnInit {
   public getTimeBlocks(): void {
     this.timeBlockService.getTimeBlock().subscribe(
       (response: TimeBlock[]) => {
-        this.timeBlocks = response;
+        this.timeBlocks = response.sort((a: TimeBlock, b: TimeBlock) => {
+          if (<number>a.id > <number>b.id) {
+            return 1;
+          } else {
+            return -1;
+          }
+        });
         for (var i = 0; i < this.timeBlocks.length; i++) {
           let curr_id = this.timeBlocks[i].id;
           if (curr_id !== undefined) {
@@ -80,10 +89,11 @@ export class AppComponent implements OnInit {
       if (this.selection[key]) {
         console.log(key);
         let timeBlockId = parseInt(key);
-    this.timeBlockService.deleteById(timeBlockId).subscribe(() => {this.getTimeBlocks()});
+        this.timeBlockService.deleteById(timeBlockId).subscribe(() => {
+          this.getTimeBlocks();
+        });
       }
     }
-
   }
   public deleteAllAction(): void {
     this.timeBlockService.deleteAll().subscribe((response) => {
@@ -95,5 +105,18 @@ export class AppComponent implements OnInit {
     console.log(id);
     this.selection[<number>id] = !this.selection[<number>id];
     console.log(this.selection);
+  }
+
+  public edit(id: number | undefined): void {
+    this.editId = <number>id;
+    console.log('trying to edit:' + this.editId);
+  }
+
+  public editSession(): void {
+    this.timeBlockService
+      .updateTimeBlock({ id: <number>this.editId, title: this.editTitle })
+      .subscribe(() => {
+        this.getTimeBlocks();
+      });
   }
 }
